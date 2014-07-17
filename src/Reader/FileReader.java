@@ -152,5 +152,6 @@ public class FileReader {
 		FileInputStream input = new FileInputStream(f);
 		XMLreader(input);
 		input.close();
+		System.out.println("Test Main Finished");
 	}
 }
