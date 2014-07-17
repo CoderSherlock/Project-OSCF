@@ -1,9 +1,7 @@
 package Reader;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,12 +33,12 @@ public class FileReader {
 			double lat = Double.valueOf(node.getAttribute("lat"));
 			nodelist.add(i, osmid, lon, lat);
 		}
-		System.out.println("Node:" + nodes.getLength());// Nodes Finished
+		System.out.println("Node:" + nodes.getLength());// Nodes Finished:TODO
 
-		for (int i = 0, len = nodelist.list.size(); i < len; i++) {
-			waylist.index.add(new Edgeindex(i, (short) 0, -1));
+		for (int i = 0, len = Nodeindex.list.size(); i < len; i++) {
+			Wayindex.index.add(new Edgeindex(i, (short) 0, -1));
 		}
-		System.out.println("Index:" + waylist.index.size());// Index Finished
+		System.out.println("Index:" + Wayindex.index.size());// Index Finished:TODO
 
 		NodeList ways = element.getElementsByTagName("way");
 
@@ -83,7 +81,7 @@ public class FileReader {
 				}
 			}
 		}
-		System.out.println("Ways:" + waylist.list.size());// Way Finished
+		System.out.println("Ways:" + Wayindex.list.size());// Way Finished:TODO
 	}
 
 	public static void linked(int waylistCount, NodeindexItem s, NodeindexItem e) {
@@ -92,83 +90,47 @@ public class FileReader {
 
 		if (lastMap.containsKey(s.id)) {
 			int lastvalue = lastMap.get(s.id);
-			if (waylist.list.get(lastvalue).snode == s.id) {
-				waylist.list.get(lastvalue).nxsnode = waylistCount;
+			if (Wayindex.list.get(lastvalue).snode == s.id) {
+				Wayindex.list.get(lastvalue).nxsnode = waylistCount;
 				lastMap.remove(s.id);
 				lastMap.put(s.id, waylistCount);
-				waylist.index.get(s.id).count++;
-			} else if (waylist.list.get(lastvalue).enode == s.id) {
-				waylist.list.get(lastvalue).nxenode = waylistCount;
+				Wayindex.index.get(s.id).count++;
+			} else if (Wayindex.list.get(lastvalue).enode == s.id) {
+				Wayindex.list.get(lastvalue).nxenode = waylistCount;
 				lastMap.remove(s.id);
 				lastMap.put(s.id, waylistCount);
-				waylist.index.get(s.id).count++;
+				Wayindex.index.get(s.id).count++;
 			}
 			hass = true;
 		}
 		if (lastMap.containsKey(e.id)) {
 			int lastvalue = lastMap.get(e.id);
-			if (waylist.list.get(lastvalue).snode == e.id) {
-				waylist.list.get(lastvalue).nxsnode = waylistCount;
+			if (Wayindex.list.get(lastvalue).snode == e.id) {
+				Wayindex.list.get(lastvalue).nxsnode = waylistCount;
 				lastMap.remove(e.id);
 				lastMap.put(e.id, waylistCount);
-				waylist.index.get(e.id).count++;
-			} else if (waylist.list.get(lastvalue).enode == e.id) {
-				waylist.list.get(lastvalue).nxenode = waylistCount;
+				Wayindex.index.get(e.id).count++;
+			} else if (Wayindex.list.get(lastvalue).enode == e.id) {
+				Wayindex.list.get(lastvalue).nxenode = waylistCount;
 				lastMap.remove(e.id);
 				lastMap.put(e.id, waylistCount);
-				waylist.index.get(e.id).count++;
+				Wayindex.index.get(e.id).count++;
 			}
 			hase = true;
 		}
 		if (hass == false) {
 			lastMap.put(s.id, waylistCount);
-			waylist.index.get(s.id).count++;
-			waylist.index.get(s.id).p2Way = waylistCount;
+			Wayindex.index.get(s.id).count++;
+			Wayindex.index.get(s.id).p2Way = waylistCount;
 		}
 		if (hase == false) {
 			lastMap.put(e.id, waylistCount);
-			waylist.index.get(e.id).count++;
-			waylist.index.get(e.id).p2Way = waylistCount;
+			Wayindex.index.get(e.id).count++;
+			Wayindex.index.get(e.id).p2Way = waylistCount;
 		}
-	}
-
-	public static void BinaryWrite() throws Exception {
-		DataOutputStream indexstream = new DataOutputStream(
-				new FileOutputStream(new File("./datas/save/index")));
-		DataOutputStream nodestream = new DataOutputStream(
-				new FileOutputStream(new File("./datas/save/node")));
-		DataOutputStream waystream = new DataOutputStream(new FileOutputStream(
-				new File("./datas/save/way")));
-		indexstream.flush();
-		for (int i = 0; i < waylist.index.size(); i++) {
-			indexstream.writeInt(waylist.index.get(i).node);
-			indexstream.writeShort(waylist.index.get(i).count);
-			indexstream.writeInt(waylist.index.get(i).p2Way);
-		}
-		indexstream.close();
-		nodestream.flush();
-		for (int i = 0; i < nodelist.list.size(); i++) {
-			nodestream.writeInt(nodelist.list.get(i).id);
-			nodestream.writeLong(nodelist.list.get(i).osmid);
-			nodestream.writeDouble(nodelist.list.get(i).lon);
-			nodestream.writeDouble(nodelist.list.get(i).lat);
-		}
-		nodestream.close();
-		waystream.flush();
-		for (int i = 0; i < waylist.list.size(); i++) {
-			waystream.writeInt(waylist.list.get(i).id);
-			waystream.writeInt(waylist.list.get(i).snode);
-			waystream.writeInt(waylist.list.get(i).enode);
-			waystream.writeInt(waylist.list.get(i).nxsnode);
-			waystream.writeInt(waylist.list.get(i).nxenode);
-			waystream.writeFloat(waylist.list.get(i).dist);
-			waystream.writeLong(waylist.list.get(i).osmid);
-		}
-		waystream.close();
 	}
 
 	private static double EARTH_RADIUS = 6378137.0;// Radius of Earth
-
 	private static double GetDistance(double lat_a, double lng_a, double lat_b,
 			double lng_b) {
 		double radLat1 = (lat_a * Math.PI / 180.0);
@@ -187,9 +149,12 @@ public class FileReader {
 		File f = new File("./datas/map1.osm");
 		FileInputStream input = new FileInputStream(f);
 		XMLreader(input);
-		//BinaryWrite();
 		input.close();
-		System.out.println("Test Main Finished With time:" + (System.currentTimeMillis() - a)
-				/ 1000f);
+		System.out.println("Test Main Finished With time:"
+				+ (System.currentTimeMillis() - a) / 1000f);
+		Nodeindex.BinaryWrite();
+		Wayindex.BinaryWrite();
+		System.out.print(false);
+		
 	}
 }
