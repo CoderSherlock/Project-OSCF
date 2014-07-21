@@ -19,7 +19,9 @@ public class FileReader {
 	public static Edges waylist = new Edges();
 	static Map<Integer, Integer> lastMap = new HashMap<Integer, Integer>();
 
-	public static void XMLreader(InputStream input) throws Exception {
+	public static void XMLreader(String name) throws Exception {
+		File f = new File("./datas/" + name + ".osm");
+		FileInputStream input = new FileInputStream(f);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(input);
@@ -82,6 +84,7 @@ public class FileReader {
 			}
 		}
 		System.out.println("Ways:" + Edges.list.size());// Edges Finished:TODO
+		input.close();
 	}
 
 	public static void linked(int waylistCount, Node s, Node e) {
@@ -130,38 +133,44 @@ public class FileReader {
 		}
 	}
 
-	private static double EARTH_RADIUS = 6378137.0;// Radius of Earth
+	private static final double EARTH_RADIUS = 6378137.0;// Radius of Earth
 
-	private static final double GetDistance(double lat_a, double lng_a,
+	private final static double GetDistance(double lat_a, double lng_a,
 			double lat_b, double lng_b) {
 		double radLat1 = (lat_a * Math.PI / 180.0);
 		double radLat2 = (lat_b * Math.PI / 180.0);
 		double a = radLat1 - radLat2;
 		double b = (lng_a - lng_b) * Math.PI / 180.0;
-		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
-				+ Math.cos(radLat1) * Math.cos(radLat2)
-				* Math.pow(Math.sin(b / 2), 2)));
+		double w = Math.cos(radLat1) * Math.cos(radLat2)
+				* Math.pow(Math.sin(b / 2), 2);
+		double x = Math.pow(Math.sin(a / 2), 2) + w;
+		double y = Math.sqrt(x);
+		double z = Math.asin(y);
+		double s = 2 * z;
 		s = s * EARTH_RADIUS;
 		s = Math.round(s * 10000) / 10000;
 		return s / 1000;
 	}
 
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws Exception {
-		File f = new File("./datas/map1.osm");
-		FileInputStream input = new FileInputStream(f);
-		XMLreader(input);
-		input.close();
-		System.out.println("Test Main Finished With time:"
+		String name = "map1";
+		XMLreader(name);
+		System.out.println("XML Prasing Finished With time:"
 				+ (System.currentTimeMillis() - a) / 1000f);
 		a = System.currentTimeMillis();
-		Nodes.BinaryWrite();
-		Edges.BinaryWrite();
-		System.out.println("Test Main Finished With time:"
+		Nodes.BinaryWrite(name);
+		Edges.BinaryWrite(name);
+		System.out.println("Binary Writing Finished With time:"
 				+ (System.currentTimeMillis() - a) / 1000f);
+		Nodes.list.clear();
+		Edges.list.clear();
+		Edges.index.clear();
 		a = System.currentTimeMillis();
-		Nodes.BinaryRead();
-		Edges.BinaryRead();
-		System.out.println("Test Main Finished With time:"
+		Nodes.BinaryRead(name);
+		Edges.BinaryRead(name);
+		System.out.println("Binary Reading Finished With time:"
 				+ (System.currentTimeMillis() - a) / 1000f);
+		System.out.println("Main test All FINISHED!");
 	}
 }

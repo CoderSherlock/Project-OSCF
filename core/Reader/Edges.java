@@ -28,21 +28,21 @@ public class Edges {
 		}
 	}
 
-	public static final void BinaryWrite() throws Exception {
+	public static final void BinaryWrite(String name) throws Exception {
 		DataOutputStream indexstream = new DataOutputStream(
-				new FileOutputStream(new File("./datas/save/index")));
+				new FileOutputStream(new File("./datas/" + name + "/index")));
 		DataOutputStream waystream = new DataOutputStream(new FileOutputStream(
-				new File("./datas/save/way")));
+				new File("./datas/" + name + "/way")));
 		indexstream.flush();
 		for (int i = 0, len = index.size(); i < len; i++) {
-			indexstream.writeInt(index.get(i).node);
+			// indexstream.writeInt(index.get(i).node);
 			indexstream.writeByte(index.get(i).count);
 			indexstream.writeInt(index.get(i).p2Way);
 		}
 		indexstream.close();
 		waystream.flush();
 		for (int i = 0, len = list.size(); i < len; i++) {
-			waystream.writeInt(list.get(i).id);
+			// waystream.writeInt(list.get(i).id);
 			waystream.writeInt(list.get(i).snode);
 			waystream.writeInt(list.get(i).enode);
 			waystream.writeInt(list.get(i).nxsnode);
@@ -53,28 +53,29 @@ public class Edges {
 		waystream.close();
 	}
 
-	public static final void BinaryRead() throws Exception {
+	public static final void BinaryRead(String name) throws Exception {
 		DataInputStream indexstream = new DataInputStream(new FileInputStream(
-				new File("./datas/save/index")));
+				new File("./datas/" + name + "/index")));
 		DataInputStream waystream = new DataInputStream(new FileInputStream(
-				new File("./datas/save/way")));
+				new File("./datas/" + name + "/way")));
+		int node = 0;
 		while (indexstream.available() > 0) {
-			int node = indexstream.readInt();
+			// int node = indexstream.readInt();
 			byte count = indexstream.readByte();
 			int p2Way = indexstream.readInt();
-			index.add(new Edgeindex(node, count, p2Way));
+			index.add(new Edgeindex(node++, count, p2Way));
 		}
 		indexstream.close();
+		int id = 0;
 		while (waystream.available() > 0) {
-			int id = waystream.readInt();
+			// int id = waystream.readInt();
 			int snode = waystream.readInt();
 			int enode = waystream.readInt();
 			int nxsnode = waystream.readInt();
 			int nxenode = waystream.readInt();
 			Float dist = waystream.readFloat();
 			long osmid = waystream.readLong();
-			list.add(new Edge(id, snode, enode, nxsnode, nxenode, dist,
-					osmid));
+			list.add(new Edge(snode, enode, nxsnode, nxenode, id++, dist, osmid));
 		}
 		waystream.close();
 	}

@@ -40,29 +40,33 @@ public class Nodes {
 	public Node idget(int id) {
 		return list.get(id);
 	}
-	
-	public static final void BinaryWrite() throws Exception {
+
+	public static final void BinaryWrite(String name) throws Exception {
+		File addr = new File("./datas/" + name);
+		if (!addr.exists())
+			addr.mkdir();
 		DataOutputStream nodestream = new DataOutputStream(
-				new FileOutputStream(new File("./datas/save/node")));
+				new FileOutputStream(new File("./datas/" + name + "/node")));
 		nodestream.flush();
 		for (int i = 0, len = list.size(); i < len; i++) {
-			nodestream.writeInt(list.get(i).id);
+			// nodestream.writeInt(list.get(i).id);
 			nodestream.writeLong(list.get(i).osmid);
 			nodestream.writeDouble(list.get(i).lon);
 			nodestream.writeDouble(list.get(i).lat);
 		}
 		nodestream.close();
 	}
-	
-	public static final void BinaryRead() throws Exception{
-		DataInputStream nodestream = new DataInputStream(
-				new FileInputStream(new File("./datas/save/node")));
-		while(nodestream.available()>0){
-			int id = nodestream.readInt();
+
+	public static final void BinaryRead(String name) throws Exception {
+		DataInputStream nodestream = new DataInputStream(new FileInputStream(
+				new File("./datas/" + name + "/node")));
+		int id = 0;
+		while (nodestream.available() > 0) {
+			// int id = nodestream.readInt();
 			long osmid = nodestream.readLong();
 			double lon = nodestream.readDouble();
 			double lat = nodestream.readDouble();
-			list.add(new Node(id, osmid, lon, lat));
+			list.add(new Node(id++, osmid, lon, lat));
 		}
 		nodestream.close();
 	}
