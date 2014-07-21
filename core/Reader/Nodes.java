@@ -41,7 +41,7 @@ public class Nodes {
 		return list.get(id);
 	}
 	
-	public static void BinaryWrite() throws Exception {
+	public static final void BinaryWrite() throws Exception {
 		DataOutputStream nodestream = new DataOutputStream(
 				new FileOutputStream(new File("./datas/save/node")));
 		nodestream.flush();
@@ -54,7 +54,7 @@ public class Nodes {
 		nodestream.close();
 	}
 	
-	public static void BinaryRead() throws Exception{
+	public static final void BinaryRead() throws Exception{
 		DataInputStream nodestream = new DataInputStream(
 				new FileInputStream(new File("./datas/save/node")));
 		while(nodestream.available()>0){

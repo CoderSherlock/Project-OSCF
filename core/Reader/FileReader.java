@@ -49,7 +49,7 @@ public class FileReader {
 			NodeList refs = way.getElementsByTagName("nd");
 			NodeList tags = way.getElementsByTagName("tag");
 			boolean oneway = false;// Flag of One way
-			for (int j = 0; j < tags.getLength(); j++) {
+			for (int j = 0, size = tags.getLength(); j < size; j++) {
 				Element tag = (Element) tags.item(j);
 
 				if (tag.getAttribute("k").equals("oneway")
@@ -57,7 +57,7 @@ public class FileReader {
 					oneway = true;
 				}
 			}
-			for (int j = 0; j < refs.getLength() - 1; j++) {
+			for (int j = 0, size = refs.getLength() - 1; j < size; j++) {
 				Element sref = (Element) refs.item(j);
 				Element eref = (Element) refs.item(j + 1);
 				int sosmid = nodelist.osmid2id(Long.valueOf(sref
@@ -131,8 +131,9 @@ public class FileReader {
 	}
 
 	private static double EARTH_RADIUS = 6378137.0;// Radius of Earth
-	private static double GetDistance(double lat_a, double lng_a, double lat_b,
-			double lng_b) {
+
+	private static final double GetDistance(double lat_a, double lng_a,
+			double lat_b, double lng_b) {
 		double radLat1 = (lat_a * Math.PI / 180.0);
 		double radLat2 = (lat_b * Math.PI / 180.0);
 		double a = radLat1 - radLat2;
@@ -145,14 +146,14 @@ public class FileReader {
 		return s / 1000;
 	}
 
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) throws Exception {
 		File f = new File("./datas/map1.osm");
 		FileInputStream input = new FileInputStream(f);
 		XMLreader(input);
 		input.close();
 		System.out.println("Test Main Finished With time:"
 				+ (System.currentTimeMillis() - a) / 1000f);
-		
+		a = System.currentTimeMillis();
 		Nodes.BinaryWrite();
 		Edges.BinaryWrite();
 		System.out.println("Test Main Finished With time:"

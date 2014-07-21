@@ -28,7 +28,7 @@ public class Edges {
 		}
 	}
 
-	public static void BinaryWrite() throws Exception {
+	public static final void BinaryWrite() throws Exception {
 		DataOutputStream indexstream = new DataOutputStream(
 				new FileOutputStream(new File("./datas/save/index")));
 		DataOutputStream waystream = new DataOutputStream(new FileOutputStream(
@@ -53,7 +53,7 @@ public class Edges {
 		waystream.close();
 	}
 
-	public static void BinaryRead() throws Exception {
+	public static final void BinaryRead() throws Exception {
 		DataInputStream indexstream = new DataInputStream(new FileInputStream(
 				new File("./datas/save/index")));
 		DataInputStream waystream = new DataInputStream(new FileInputStream(
