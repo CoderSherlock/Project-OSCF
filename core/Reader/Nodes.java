@@ -8,15 +8,15 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Nodeindex {
-	protected static List<NodeindexItem> list = new ArrayList<NodeindexItem>();
+public class Nodes {
+	protected static List<Node> list = new ArrayList<Node>();
 
 	public void add(int id, long osmid, double lon, double lat) {
-		list.add(new NodeindexItem(id, osmid, lon, lat));
+		list.add(new Node(id, osmid, lon, lat));
 	}
 
 	public int osmid2id(long osmid) {
-		for (NodeindexItem item : list) {
+		for (Node item : list) {
 			if (item.osmid == osmid) {
 				return item.id;
 			}
@@ -28,8 +28,8 @@ public class Nodeindex {
 		return list.get(id).osmid;
 	}
 
-	public NodeindexItem oidget(long osmid) {
-		for (NodeindexItem item : list) {
+	public Node oidget(long osmid) {
+		for (Node item : list) {
 			if (item.osmid == osmid) {
 				return item;
 			}
@@ -37,7 +37,7 @@ public class Nodeindex {
 		return null;
 	}
 
-	public NodeindexItem idget(int id) {
+	public Node idget(int id) {
 		return list.get(id);
 	}
 	
@@ -62,7 +62,7 @@ public class Nodeindex {
 			long osmid = nodestream.readLong();
 			double lon = nodestream.readDouble();
 			double lat = nodestream.readDouble();
-			list.add(new NodeindexItem(id, osmid, lon, lat));
+			list.add(new Node(id, osmid, lon, lat));
 		}
 		nodestream.close();
 	}

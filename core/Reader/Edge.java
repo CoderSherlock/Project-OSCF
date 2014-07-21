@@ -1,6 +1,6 @@
 package Reader;
 
-public class WayindexItem {
+public class Edge {
 	protected int id;
 	protected int snode;
 	protected int enode;
@@ -9,7 +9,7 @@ public class WayindexItem {
 	protected float dist;
 	protected long osmid;
 
-	public WayindexItem(int snode, int enode, int id, float dist, long osmid) {
+	public Edge(int snode, int enode, int id, float dist, long osmid) {
 		this.snode = snode;
 		this.enode = enode;
 		this.id = id;
@@ -17,7 +17,7 @@ public class WayindexItem {
 		this.dist = dist;
 	}
 
-	public WayindexItem(int snode, int enode, int nxsnode, int nxenode, int id,
+	public Edge(int snode, int enode, int nxsnode, int nxenode, int id,
 			float dist, long osmid) {
 		this.snode = snode;
 		this.enode = enode;

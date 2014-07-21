@@ -8,17 +8,17 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Wayindex {
-	protected static List<WayindexItem> list = new ArrayList<WayindexItem>();
+public class Edges {
+	protected static List<Edge> list = new ArrayList<Edge>();
 	protected static List<Edgeindex> index = new ArrayList<Edgeindex>();
 
 	public void add(int snode, int enode, int id, float dist, long osmid) {
-		list.add(new WayindexItem(snode, enode, id, dist, osmid));
+		list.add(new Edge(snode, enode, id, dist, osmid));
 	}
 
 	public void add(int snode, int enode, int nxs, int nxe, int id, float dist,
 			long osmid) {
-		list.add(new WayindexItem(snode, enode, nxs, nxe, id, dist, osmid));
+		list.add(new Edge(snode, enode, nxs, nxe, id, dist, osmid));
 	}
 
 	public void clearUnjointedNode() {
@@ -36,7 +36,7 @@ public class Wayindex {
 		indexstream.flush();
 		for (int i = 0, len = index.size(); i < len; i++) {
 			indexstream.writeInt(index.get(i).node);
-			indexstream.writeShort(index.get(i).count);
+			indexstream.writeByte(index.get(i).count);
 			indexstream.writeInt(index.get(i).p2Way);
 		}
 		indexstream.close();
@@ -60,7 +60,7 @@ public class Wayindex {
 				new File("./datas/save/way")));
 		while (indexstream.available() > 0) {
 			int node = indexstream.readInt();
-			short count = indexstream.readShort();
+			byte count = indexstream.readByte();
 			int p2Way = indexstream.readInt();
 			index.add(new Edgeindex(node, count, p2Way));
 		}
@@ -73,7 +73,7 @@ public class Wayindex {
 			int nxenode = waystream.readInt();
 			Float dist = waystream.readFloat();
 			long osmid = waystream.readLong();
-			list.add(new WayindexItem(id, snode, enode, nxsnode, nxenode, dist,
+			list.add(new Edge(id, snode, enode, nxsnode, nxenode, dist,
 					osmid));
 		}
 		waystream.close();

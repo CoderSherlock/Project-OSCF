@@ -15,8 +15,8 @@ import org.w3c.dom.NodeList;
 
 public class FileReader {
 	static long a = System.currentTimeMillis();// TODO:Record Running Time
-	public static Nodeindex nodelist = new Nodeindex();
-	public static Wayindex waylist = new Wayindex();
+	public static Nodes nodelist = new Nodes();
+	public static Edges waylist = new Edges();
 	static Map<Integer, Integer> lastMap = new HashMap<Integer, Integer>();
 
 	public static void XMLreader(InputStream input) throws Exception {
@@ -35,10 +35,10 @@ public class FileReader {
 		}
 		System.out.println("Node:" + nodes.getLength());// Nodes Finished:TODO
 
-		for (int i = 0, len = Nodeindex.list.size(); i < len; i++) {
-			Wayindex.index.add(new Edgeindex(i, (short) 0, -1));
+		for (int i = 0, len = Nodes.list.size(); i < len; i++) {
+			Edges.index.add(new Edgeindex(i, (byte) 0, -1));
 		}
-		System.out.println("Index:" + Wayindex.index.size());// Index Finished:TODO
+		System.out.println("Index:" + Edges.index.size());// Index Finished:TODO
 
 		NodeList ways = element.getElementsByTagName("way");
 
@@ -64,8 +64,8 @@ public class FileReader {
 						.getAttribute("ref")));
 				int eosmid = nodelist.osmid2id(Long.valueOf(eref
 						.getAttribute("ref")));
-				NodeindexItem s = nodelist.idget(sosmid);
-				NodeindexItem e = nodelist.idget(eosmid);
+				Node s = nodelist.idget(sosmid);
+				Node e = nodelist.idget(eosmid);
 				// System.out.println(GetDistance(s.lat, s.lon, e.lat, e.lon));
 				float dist = (float) GetDistance(s.lat, s.lon, e.lat, e.lon);
 
@@ -81,52 +81,52 @@ public class FileReader {
 				}
 			}
 		}
-		System.out.println("Ways:" + Wayindex.list.size());// Way Finished:TODO
+		System.out.println("Ways:" + Edges.list.size());// Edges Finished:TODO
 	}
 
-	public static void linked(int waylistCount, NodeindexItem s, NodeindexItem e) {
+	public static void linked(int waylistCount, Node s, Node e) {
 		boolean hass = false;
 		boolean hase = false;
 
 		if (lastMap.containsKey(s.id)) {
 			int lastvalue = lastMap.get(s.id);
-			if (Wayindex.list.get(lastvalue).snode == s.id) {
-				Wayindex.list.get(lastvalue).nxsnode = waylistCount;
+			if (Edges.list.get(lastvalue).snode == s.id) {
+				Edges.list.get(lastvalue).nxsnode = waylistCount;
 				lastMap.remove(s.id);
 				lastMap.put(s.id, waylistCount);
-				Wayindex.index.get(s.id).count++;
-			} else if (Wayindex.list.get(lastvalue).enode == s.id) {
-				Wayindex.list.get(lastvalue).nxenode = waylistCount;
+				Edges.index.get(s.id).count++;
+			} else if (Edges.list.get(lastvalue).enode == s.id) {
+				Edges.list.get(lastvalue).nxenode = waylistCount;
 				lastMap.remove(s.id);
 				lastMap.put(s.id, waylistCount);
-				Wayindex.index.get(s.id).count++;
+				Edges.index.get(s.id).count++;
 			}
 			hass = true;
 		}
 		if (lastMap.containsKey(e.id)) {
 			int lastvalue = lastMap.get(e.id);
-			if (Wayindex.list.get(lastvalue).snode == e.id) {
-				Wayindex.list.get(lastvalue).nxsnode = waylistCount;
+			if (Edges.list.get(lastvalue).snode == e.id) {
+				Edges.list.get(lastvalue).nxsnode = waylistCount;
 				lastMap.remove(e.id);
 				lastMap.put(e.id, waylistCount);
-				Wayindex.index.get(e.id).count++;
-			} else if (Wayindex.list.get(lastvalue).enode == e.id) {
-				Wayindex.list.get(lastvalue).nxenode = waylistCount;
+				Edges.index.get(e.id).count++;
+			} else if (Edges.list.get(lastvalue).enode == e.id) {
+				Edges.list.get(lastvalue).nxenode = waylistCount;
 				lastMap.remove(e.id);
 				lastMap.put(e.id, waylistCount);
-				Wayindex.index.get(e.id).count++;
+				Edges.index.get(e.id).count++;
 			}
 			hase = true;
 		}
 		if (hass == false) {
 			lastMap.put(s.id, waylistCount);
-			Wayindex.index.get(s.id).count++;
-			Wayindex.index.get(s.id).p2Way = waylistCount;
+			Edges.index.get(s.id).count++;
+			Edges.index.get(s.id).p2Way = waylistCount;
 		}
 		if (hase == false) {
 			lastMap.put(e.id, waylistCount);
-			Wayindex.index.get(e.id).count++;
-			Wayindex.index.get(e.id).p2Way = waylistCount;
+			Edges.index.get(e.id).count++;
+			Edges.index.get(e.id).p2Way = waylistCount;
 		}
 	}
 
@@ -152,9 +152,15 @@ public class FileReader {
 		input.close();
 		System.out.println("Test Main Finished With time:"
 				+ (System.currentTimeMillis() - a) / 1000f);
-		Nodeindex.BinaryWrite();
-		Wayindex.BinaryWrite();
-		System.out.print(false);
 		
+		Nodes.BinaryWrite();
+		Edges.BinaryWrite();
+		System.out.println("Test Main Finished With time:"
+				+ (System.currentTimeMillis() - a) / 1000f);
+		a = System.currentTimeMillis();
+		Nodes.BinaryRead();
+		Edges.BinaryRead();
+		System.out.println("Test Main Finished With time:"
+				+ (System.currentTimeMillis() - a) / 1000f);
 	}
 }
