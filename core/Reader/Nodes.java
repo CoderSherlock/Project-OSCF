@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Nodes {
-	protected static List<Node> list = new ArrayList<Node>();
+	protected List<Node> list = new ArrayList<Node>();
 
 	public void add(int id, long osmid, double lon, double lat) {
 		list.add(new Node(id, osmid, lon, lat));
@@ -41,7 +41,7 @@ public class Nodes {
 		return list.get(id);
 	}
 
-	public static final void BinaryWrite(String name) throws Exception {
+	public final void BinaryWrite(String name) throws Exception {
 		File addr = new File("./datas/" + name);
 		if (!addr.exists())
 			addr.mkdir();
@@ -57,7 +57,7 @@ public class Nodes {
 		nodestream.close();
 	}
 
-	public static final void BinaryRead(String name) throws Exception {
+	public final void BinaryRead(String name) throws Exception {
 		DataInputStream nodestream = new DataInputStream(new FileInputStream(
 				new File("./datas/" + name + "/node")));
 		int id = 0;
@@ -71,11 +71,15 @@ public class Nodes {
 		nodestream.close();
 	}
 
-	public final static int size() {
+	public final int size() {
 		return list.size();
 	}
 	
-	public final static Node get(int index){
+	public final Node get(int index){
 		return list.get(index);
+	}
+	
+	public void clear(){
+		list.clear();
 	}
 }

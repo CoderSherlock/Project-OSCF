@@ -12,12 +12,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class FileReader {
-	public static Nodes nodelist = new Nodes();
-	public static Edges waylist = new Edges();
+public class Graph {
+	public Nodes nodelist = new Nodes();
+	public Edges waylist = new Edges();
 	static Map<Integer, Integer> lastMap = new HashMap<Integer, Integer>();
 
-	public static void XMLreader(String name) throws Exception {
+	public void XMLreader(String name) throws Exception {
 		File f = new File("./datas/" + name + ".osm");
 		FileInputStream input = new FileInputStream(f);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -35,10 +35,11 @@ public class FileReader {
 		}
 		System.out.println("Node:" + nodes.getLength());// Nodes Finished:TODO
 
-		for (int i = 0, len = Nodes.list.size(); i < len; i++) {
-			Edges.index.add(new Edgeindex(i, (byte) 0, -1));
+		for (int i = 0, len = nodelist.list.size(); i < len; i++) {
+			waylist.index.add(new Edgeindex(i, (byte) 0, -1));
 		}
-		System.out.println("Index:" + Edges.index.size());// Index Finished:TODO
+		System.out.println("Index:" + waylist.index.size());// Index
+															// Finished:TODO
 
 		NodeList ways = element.getElementsByTagName("way");
 
@@ -85,60 +86,60 @@ public class FileReader {
 				}
 			}
 		}
-		System.out.println("Ways:" + Edges.list.size());// Edges Finished:TODO
+		System.out.println("Ways:" + waylist.list.size());// Edges Finished:TODO
 		input.close();
 	}
 
-	public static void linked(int waylistCount, Node s, Node e) {
+	public void linked(int waylistCount, Node s, Node e) {
 		boolean hass = false;
 		boolean hase = false;
 
 		if (lastMap.containsKey(s.getId())) {
 			int lastvalue = lastMap.get(s.getId());
-			if (Edges.list.get(lastvalue).getSnode() == s.getId()) {
-				Edges.list.get(lastvalue).setNxsnode(waylistCount);
+			if (waylist.list.get(lastvalue).getSnode() == s.getId()) {
+				waylist.list.get(lastvalue).setNxsnode(waylistCount);
 				lastMap.remove(s.getId());
 				lastMap.put(s.getId(), waylistCount);
-				Edges.index.get(s.getId()).count++;
-			} else if (Edges.list.get(lastvalue).getEnode() == s.getId()) {
-				Edges.list.get(lastvalue).setNxenode(waylistCount);
+				waylist.index.get(s.getId()).count++;
+			} else if (waylist.list.get(lastvalue).getEnode() == s.getId()) {
+				waylist.list.get(lastvalue).setNxenode(waylistCount);
 				lastMap.remove(s.getId());
 				lastMap.put(s.getId(), waylistCount);
-				Edges.index.get(s.getId()).count++;
+				waylist.index.get(s.getId()).count++;
 			}
 			hass = true;
 		}
 		if (lastMap.containsKey(e.getId())) {
 			int lastvalue = lastMap.get(e.getId());
-			if (Edges.list.get(lastvalue).getSnode() == e.getId()) {
-				Edges.list.get(lastvalue).setNxsnode(waylistCount);
+			if (waylist.list.get(lastvalue).getSnode() == e.getId()) {
+				waylist.list.get(lastvalue).setNxsnode(waylistCount);
 				lastMap.remove(e.getId());
 				lastMap.put(e.getId(), waylistCount);
-				Edges.index.get(e.getId()).count++;
-			} else if (Edges.list.get(lastvalue).getEnode() == e.getId()) {
-				Edges.list.get(lastvalue).setNxenode(waylistCount);
+				waylist.index.get(e.getId()).count++;
+			} else if (waylist.list.get(lastvalue).getEnode() == e.getId()) {
+				waylist.list.get(lastvalue).setNxenode(waylistCount);
 				lastMap.remove(e.getId());
 				lastMap.put(e.getId(), waylistCount);
-				Edges.index.get(e.getId()).count++;
+				waylist.index.get(e.getId()).count++;
 			}
 			hase = true;
 		}
 		if (hass == false) {
 			lastMap.put(s.getId(), waylistCount);
-			Edges.index.get(s.getId()).count++;
-			Edges.index.get(s.getId()).p2Way = waylistCount;
+			waylist.index.get(s.getId()).count++;
+			waylist.index.get(s.getId()).p2Way = waylistCount;
 		}
 		if (hase == false) {
 			lastMap.put(e.getId(), waylistCount);
-			Edges.index.get(e.getId()).count++;
-			Edges.index.get(e.getId()).p2Way = waylistCount;
+			waylist.index.get(e.getId()).count++;
+			waylist.index.get(e.getId()).p2Way = waylistCount;
 		}
 	}
 
 	private static final double EARTH_RADIUS = 6378137.0;// Radius of Earth
 
-	private final static double GetDistance(double lat_a, double lng_a,
-			double lat_b, double lng_b) {
+	private final double GetDistance(double lat_a, double lng_a, double lat_b,
+			double lng_b) {
 		double radLat1 = (lat_a * Math.PI / 180.0);
 		double radLat2 = (lat_b * Math.PI / 180.0);
 		double a = radLat1 - radLat2;

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Edges {
-	protected static List<Edge> list = new ArrayList<Edge>();
-	protected static List<Edgeindex> index = new ArrayList<Edgeindex>();
+	protected List<Edge> list = new ArrayList<Edge>();
+	protected List<Edgeindex> index = new ArrayList<Edgeindex>();
 
 	public void add(int snode, int enode, int id, float dist, long osmid) {
 		list.add(new Edge(snode, enode, id, dist, osmid));
@@ -28,7 +28,7 @@ public class Edges {
 		}
 	}
 
-	public static final void BinaryWrite(String name) throws Exception {
+	public final void BinaryWrite(String name) throws Exception {
 		DataOutputStream indexstream = new DataOutputStream(
 				new FileOutputStream(new File("./datas/" + name + "/index")));
 		DataOutputStream waystream = new DataOutputStream(new FileOutputStream(
@@ -53,7 +53,7 @@ public class Edges {
 		waystream.close();
 	}
 
-	public static final void BinaryRead(String name) throws Exception {
+	public final void BinaryRead(String name) throws Exception {
 		DataInputStream indexstream = new DataInputStream(new FileInputStream(
 				new File("./datas/" + name + "/index")));
 		DataInputStream waystream = new DataInputStream(new FileInputStream(
@@ -80,15 +80,20 @@ public class Edges {
 		waystream.close();
 	}
 
-	public static int indexsize() {
+	public int indexsize() {
 		return index.size();
 	}
 
-	public static int size() {
+	public int size() {
 		return list.size();
 	}
 
-	public static Edge get(int index) {
+	public Edge get(int index) {
 		return list.get(index);
+	}
+	
+	public void clear(){
+		list.clear();
+		index.clear();
 	}
 }
