@@ -79,16 +79,16 @@ public class Edges {
 		}
 		waystream.close();
 	}
-	
-	public static int indexsize(){
+
+	public static int indexsize() {
 		return index.size();
 	}
-	
-	public static int size(){
+
+	public static int size() {
 		return list.size();
 	}
-	
-	public static Edge get(int index){
+
+	public static Edge get(int index) {
 		return list.get(index);
 	}
 }

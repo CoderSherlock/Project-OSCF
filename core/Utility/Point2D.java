@@ -7,11 +7,11 @@ public class Point2D {
 	protected double lon;
 	protected double lat;
 
-	public Point2D(double lon ,double lat){
+	public Point2D(double lon, double lat) {
 		this.lon = lon;
 		this.lat = lat;
 	}
-	
+
 	public int getClosest() {
 		int id = 0;
 		double dist = Double.MAX_VALUE;
@@ -20,7 +20,7 @@ public class Point2D {
 					.getLon(), Nodes.get(Edges.get(i).getSnode()).getLat(),
 					Nodes.get(Edges.get(i).getEnode()).getLon(),
 					Nodes.get(Edges.get(i).getEnode()).getLat());
-			if(d<dist){
+			if (d < dist) {
 				dist = d;
 				id = Edges.get(i).getId();
 			}

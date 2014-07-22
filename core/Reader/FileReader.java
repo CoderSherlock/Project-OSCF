@@ -12,10 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import Utility.Point2D;
-
 public class FileReader {
-	static long a = System.currentTimeMillis();// TODO:Record Running Time
 	public static Nodes nodelist = new Nodes();
 	public static Edges waylist = new Edges();
 	static Map<Integer, Integer> lastMap = new HashMap<Integer, Integer>();
@@ -70,16 +67,20 @@ public class FileReader {
 				Node s = nodelist.idget(sosmid);
 				Node e = nodelist.idget(eosmid);
 				// System.out.println(GetDistance(s.lat, s.lon, e.lat, e.lon));
-				float dist = (float) GetDistance(s.getLat(), s.getLon(), e.getLat(), e.getLon());
+				float dist = (float) GetDistance(s.getLat(), s.getLon(),
+						e.getLat(), e.getLon());
 
 				if (oneway == false) {
-					waylist.add(s.getId(), e.getId(), -1, -1, ++waylistCount, dist, osmid);
+					waylist.add(s.getId(), e.getId(), -1, -1, ++waylistCount,
+							dist, osmid);
 					linked(waylistCount, s, e);
-					waylist.add(e.getId(), s.getId(), -1, -1, ++waylistCount, dist, osmid);
+					waylist.add(e.getId(), s.getId(), -1, -1, ++waylistCount,
+							dist, osmid);
 					linked(waylistCount, e, s);
 
 				} else {// One way Start
-					waylist.add(s.getId(), e.getId(), -1, -1, ++waylistCount, dist, osmid);
+					waylist.add(s.getId(), e.getId(), -1, -1, ++waylistCount,
+							dist, osmid);
 					linked(waylistCount, s, e);
 				}
 			}
@@ -153,29 +154,4 @@ public class FileReader {
 		return s / 1000;
 	}
 
-	public static void main(String[] args) throws Exception {
-		String name = "map1";
-		/*XMLreader(name);
-		System.out.println("XML Prasing Finished With time:"
-				+ (System.currentTimeMillis() - a) / 1000f);
-		a = System.currentTimeMillis();
-		Nodes.BinaryWrite(name);
-		Edges.BinaryWrite(name);
-		System.out.println("Binary Writing Finished With time:"
-				+ (System.currentTimeMillis() - a) / 1000f);
-		Nodes.list.clear();
-		Edges.list.clear();
-		Edges.index.clear();*/
-		a = System.currentTimeMillis();
-		Nodes.BinaryRead(name);
-		Edges.BinaryRead(name);
-		System.out.println("Binary Reading Finished With time:"
-				+ (System.currentTimeMillis() - a) / 1000f);
-		a = System.currentTimeMillis();
-		Point2D p = new Point2D(116.4269096,39.9367071);
-		System.out.println(p.getClosest());
-		System.out.println("Find Closest Finished With time:"
-				+ (System.currentTimeMillis() - a) / 1000f);
-		System.out.println("Main test All FINISHED!");
-	}
 }

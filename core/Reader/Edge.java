@@ -83,5 +83,5 @@ public class Edge {
 	public void setOsmid(long osmid) {
 		this.osmid = osmid;
 	}
-	
+
 }

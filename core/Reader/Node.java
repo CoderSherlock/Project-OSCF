@@ -5,8 +5,8 @@ public class Node {
 	private long osmid;
 	private double lon;
 	private double lat;
-	
-	public Node(int id, long osmid, double lon, double lat){
+
+	public Node(int id, long osmid, double lon, double lat) {
 		this.setId(id);
 		this.setOsmid(osmid);
 		this.setLon(lon);
@@ -44,5 +44,5 @@ public class Node {
 	public void setLat(double lat) {
 		this.lat = lat;
 	}
-	
+
 }
