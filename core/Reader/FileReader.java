@@ -2,7 +2,6 @@ package Reader;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +11,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import Utility.Point2D;
 
 public class FileReader {
 	static long a = System.currentTimeMillis();// TODO:Record Running Time
@@ -69,16 +70,16 @@ public class FileReader {
 				Node s = nodelist.idget(sosmid);
 				Node e = nodelist.idget(eosmid);
 				// System.out.println(GetDistance(s.lat, s.lon, e.lat, e.lon));
-				float dist = (float) GetDistance(s.lat, s.lon, e.lat, e.lon);
+				float dist = (float) GetDistance(s.getLat(), s.getLon(), e.getLat(), e.getLon());
 
 				if (oneway == false) {
-					waylist.add(s.id, e.id, -1, -1, ++waylistCount, dist, osmid);
+					waylist.add(s.getId(), e.getId(), -1, -1, ++waylistCount, dist, osmid);
 					linked(waylistCount, s, e);
-					waylist.add(e.id, s.id, -1, -1, ++waylistCount, dist, osmid);
+					waylist.add(e.getId(), s.getId(), -1, -1, ++waylistCount, dist, osmid);
 					linked(waylistCount, e, s);
 
 				} else {// One way Start
-					waylist.add(s.id, e.id, -1, -1, ++waylistCount, dist, osmid);
+					waylist.add(s.getId(), e.getId(), -1, -1, ++waylistCount, dist, osmid);
 					linked(waylistCount, s, e);
 				}
 			}
@@ -91,45 +92,45 @@ public class FileReader {
 		boolean hass = false;
 		boolean hase = false;
 
-		if (lastMap.containsKey(s.id)) {
-			int lastvalue = lastMap.get(s.id);
-			if (Edges.list.get(lastvalue).snode == s.id) {
-				Edges.list.get(lastvalue).nxsnode = waylistCount;
-				lastMap.remove(s.id);
-				lastMap.put(s.id, waylistCount);
-				Edges.index.get(s.id).count++;
-			} else if (Edges.list.get(lastvalue).enode == s.id) {
-				Edges.list.get(lastvalue).nxenode = waylistCount;
-				lastMap.remove(s.id);
-				lastMap.put(s.id, waylistCount);
-				Edges.index.get(s.id).count++;
+		if (lastMap.containsKey(s.getId())) {
+			int lastvalue = lastMap.get(s.getId());
+			if (Edges.list.get(lastvalue).getSnode() == s.getId()) {
+				Edges.list.get(lastvalue).setNxsnode(waylistCount);
+				lastMap.remove(s.getId());
+				lastMap.put(s.getId(), waylistCount);
+				Edges.index.get(s.getId()).count++;
+			} else if (Edges.list.get(lastvalue).getEnode() == s.getId()) {
+				Edges.list.get(lastvalue).setNxenode(waylistCount);
+				lastMap.remove(s.getId());
+				lastMap.put(s.getId(), waylistCount);
+				Edges.index.get(s.getId()).count++;
 			}
 			hass = true;
 		}
-		if (lastMap.containsKey(e.id)) {
-			int lastvalue = lastMap.get(e.id);
-			if (Edges.list.get(lastvalue).snode == e.id) {
-				Edges.list.get(lastvalue).nxsnode = waylistCount;
-				lastMap.remove(e.id);
-				lastMap.put(e.id, waylistCount);
-				Edges.index.get(e.id).count++;
-			} else if (Edges.list.get(lastvalue).enode == e.id) {
-				Edges.list.get(lastvalue).nxenode = waylistCount;
-				lastMap.remove(e.id);
-				lastMap.put(e.id, waylistCount);
-				Edges.index.get(e.id).count++;
+		if (lastMap.containsKey(e.getId())) {
+			int lastvalue = lastMap.get(e.getId());
+			if (Edges.list.get(lastvalue).getSnode() == e.getId()) {
+				Edges.list.get(lastvalue).setNxsnode(waylistCount);
+				lastMap.remove(e.getId());
+				lastMap.put(e.getId(), waylistCount);
+				Edges.index.get(e.getId()).count++;
+			} else if (Edges.list.get(lastvalue).getEnode() == e.getId()) {
+				Edges.list.get(lastvalue).setNxenode(waylistCount);
+				lastMap.remove(e.getId());
+				lastMap.put(e.getId(), waylistCount);
+				Edges.index.get(e.getId()).count++;
 			}
 			hase = true;
 		}
 		if (hass == false) {
-			lastMap.put(s.id, waylistCount);
-			Edges.index.get(s.id).count++;
-			Edges.index.get(s.id).p2Way = waylistCount;
+			lastMap.put(s.getId(), waylistCount);
+			Edges.index.get(s.getId()).count++;
+			Edges.index.get(s.getId()).p2Way = waylistCount;
 		}
 		if (hase == false) {
-			lastMap.put(e.id, waylistCount);
-			Edges.index.get(e.id).count++;
-			Edges.index.get(e.id).p2Way = waylistCount;
+			lastMap.put(e.getId(), waylistCount);
+			Edges.index.get(e.getId()).count++;
+			Edges.index.get(e.getId()).p2Way = waylistCount;
 		}
 	}
 
@@ -152,10 +153,9 @@ public class FileReader {
 		return s / 1000;
 	}
 
-	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws Exception {
 		String name = "map1";
-		XMLreader(name);
+		/*XMLreader(name);
 		System.out.println("XML Prasing Finished With time:"
 				+ (System.currentTimeMillis() - a) / 1000f);
 		a = System.currentTimeMillis();
@@ -165,11 +165,16 @@ public class FileReader {
 				+ (System.currentTimeMillis() - a) / 1000f);
 		Nodes.list.clear();
 		Edges.list.clear();
-		Edges.index.clear();
+		Edges.index.clear();*/
 		a = System.currentTimeMillis();
 		Nodes.BinaryRead(name);
 		Edges.BinaryRead(name);
 		System.out.println("Binary Reading Finished With time:"
+				+ (System.currentTimeMillis() - a) / 1000f);
+		a = System.currentTimeMillis();
+		Point2D p = new Point2D(116.4269096,39.9367071);
+		System.out.println(p.getClosest());
+		System.out.println("Find Closest Finished With time:"
 				+ (System.currentTimeMillis() - a) / 1000f);
 		System.out.println("Main test All FINISHED!");
 	}

@@ -43,12 +43,12 @@ public class Edges {
 		waystream.flush();
 		for (int i = 0, len = list.size(); i < len; i++) {
 			// waystream.writeInt(list.get(i).id);
-			waystream.writeInt(list.get(i).snode);
-			waystream.writeInt(list.get(i).enode);
-			waystream.writeInt(list.get(i).nxsnode);
-			waystream.writeInt(list.get(i).nxenode);
-			waystream.writeFloat(list.get(i).dist);
-			waystream.writeLong(list.get(i).osmid);
+			waystream.writeInt(list.get(i).getSnode());
+			waystream.writeInt(list.get(i).getEnode());
+			waystream.writeInt(list.get(i).getNxsnode());
+			waystream.writeInt(list.get(i).getNxenode());
+			waystream.writeFloat(list.get(i).getDist());
+			waystream.writeLong(list.get(i).getOsmid());
 		}
 		waystream.close();
 	}
@@ -78,5 +78,17 @@ public class Edges {
 			list.add(new Edge(snode, enode, nxsnode, nxenode, id++, dist, osmid));
 		}
 		waystream.close();
+	}
+	
+	public static int indexsize(){
+		return index.size();
+	}
+	
+	public static int size(){
+		return list.size();
+	}
+	
+	public static Edge get(int index){
+		return list.get(index);
 	}
 }

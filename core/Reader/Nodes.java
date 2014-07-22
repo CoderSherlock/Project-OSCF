@@ -17,20 +17,20 @@ public class Nodes {
 
 	public int osmid2id(long osmid) {
 		for (Node item : list) {
-			if (item.osmid == osmid) {
-				return item.id;
+			if (item.getOsmid() == osmid) {
+				return item.getId();
 			}
 		}
 		return -1;
 	}
 
 	public long id2osmid(int id) {
-		return list.get(id).osmid;
+		return list.get(id).getOsmid();
 	}
 
 	public Node oidget(long osmid) {
 		for (Node item : list) {
-			if (item.osmid == osmid) {
+			if (item.getOsmid() == osmid) {
 				return item;
 			}
 		}
@@ -50,9 +50,9 @@ public class Nodes {
 		nodestream.flush();
 		for (int i = 0, len = list.size(); i < len; i++) {
 			// nodestream.writeInt(list.get(i).id);
-			nodestream.writeLong(list.get(i).osmid);
-			nodestream.writeDouble(list.get(i).lon);
-			nodestream.writeDouble(list.get(i).lat);
+			nodestream.writeLong(list.get(i).getOsmid());
+			nodestream.writeDouble(list.get(i).getLon());
+			nodestream.writeDouble(list.get(i).getLat());
 		}
 		nodestream.close();
 	}
@@ -69,5 +69,13 @@ public class Nodes {
 			list.add(new Node(id++, osmid, lon, lat));
 		}
 		nodestream.close();
+	}
+
+	public final static int size() {
+		return list.size();
+	}
+	
+	public final static Node get(int index){
+		return list.get(index);
 	}
 }
