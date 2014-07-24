@@ -4,7 +4,6 @@ import Reader.Graph;
 import Utility.Point2D;
 
 public class UnitTest {
-	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws Exception {
 		Graph g = new Graph();
 		long a = System.currentTimeMillis();// TODO:Record Running Time

@@ -1,14 +1,15 @@
 package Utility;
 
 import Reader.Edges;
-import Reader.Node;
 import Reader.Nodes;
 
 public class Point2D {
 	protected double lon;
 	protected double lat;
-	protected double tmplon;//Temporary Memorize the closest point's longitude on edges
-	protected double tmplat;//Temporary Memorize the closest point's latitude on edges
+	protected double tmplon;// Temporary Memorize the closest point's longitude
+							// on edges
+	protected double tmplat;// Temporary Memorize the closest point's latitude
+							// on edges
 
 	public Point2D(double lon, double lat) {
 		this.lon = lon;
@@ -77,13 +78,12 @@ public class Point2D {
 			double llon2, double llat2) {
 		double x = llon1 - llon2, y = llat1 - llat2;
 		double xout = 0, yout = 0;
-		double a1 = 0, b1 = 0, c1 = 0;
-		double a2 = 0, b2 = 0, c2 = 0;
+		double a1 = 0, c1 = 0;
+		double a2 = 0, c2 = 0;
 		if (x != 0 && y != 0) {
 			a1 = y / x;
 			c1 = llat1 - a1 * llon1;
 			a2 = -1 / a1;
-			b2 = -1;
 			c2 = lat - a2 * lon;
 			xout = (c2 - c1) / (a1 - a2);
 			yout = a2 * xout + c2;
