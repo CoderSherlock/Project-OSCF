@@ -91,9 +91,18 @@ public class Edges {
 	public Edge get(int index) {
 		return list.get(index);
 	}
-	
-	public void clear(){
+
+	public void clear() {
 		list.clear();
 		index.clear();
+	}
+
+	public boolean hasReverse(Edge e) {
+		for (int i = 0, count = list.size(); i < count; i++) {
+			if (list.get(i).getSnode() == e.getEnode()
+					&& list.get(i).getEnode() == e.getSnode())
+				return true;
+		}
+		return false;
 	}
 }
